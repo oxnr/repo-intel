@@ -1,5 +1,7 @@
 # repo-intel
 
+[![Test](https://github.com/oxnr/repo-intel/actions/workflows/test.yml/badge.svg)](https://github.com/oxnr/repo-intel/actions/workflows/test.yml)
+
 AI-powered competitive intelligence from GitHub repos. Monitor competitor activity, releases, and strategic signals — delivered as GitHub Issues.
 
 ## Features
