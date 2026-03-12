@@ -3,10 +3,12 @@ import * as github from '@actions/github';
 import { fetchRepoData } from './github-client';
 import { analyzeRepo, RepoReport } from './analyzer';
 import { createIssue, createPRComment, outputJson } from './output';
+import { sendSlackNotification } from './slack-notifier';
 
 async function run(): Promise<void> {
   try {
     const reposInput = core.getInput('repos', { required: true });
+    const slackWebhookUrl = core.getInput('slack-webhook-url');
     const token = core.getInput('github-token', { required: true });
     const outputFormat = core.getInput('output-format') || 'issue';
     const periodDays = parseInt(core.getInput('period-days') || '7', 10);
@@ -70,6 +72,9 @@ async function run(): Promise<void> {
         core.warning(`Unknown output format "${outputFormat}", defaulting to JSON`);
     }
 
+    if (slackWebhookUrl) {
+      await sendSlackNotification(slackWebhookUrl, reports);
+    }
     core.info('repo-intel analysis complete!');
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);

@@ -22,6 +22,10 @@ inputs:
     description: 'Number of days to analyze (default: 7)'
     required: false
     default: '7'
+  slack-webhook-url:
+    description: 'Slack incoming webhook URL. If provided, sends the digest to Slack using Block Kit formatting.'
+    required: false
+    default: ''
 
 outputs:
   report:
