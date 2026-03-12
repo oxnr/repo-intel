@@ -1,0 +1,34 @@
+name: 'Repo Intel'
+description: 'AI-powered competitive intelligence from GitHub repos. Monitor competitor activity, releases, and trends.'
+author: 'Zero Human Corp'
+
+branding:
+  icon: 'activity'
+  color: 'blue'
+
+inputs:
+  repos:
+    description: 'Comma-separated list of repos to monitor (e.g., "facebook/react,vercel/next.js")'
+    required: true
+  github-token:
+    description: 'GitHub token for API access'
+    required: true
+    default: ${{ github.token }}
+  output-format:
+    description: 'Output format: "issue", "json", or "pr-comment"'
+    required: false
+    default: 'issue'
+  period-days:
+    description: 'Number of days to analyze (default: 7)'
+    required: false
+    default: '7'
+
+outputs:
+  report:
+    description: 'JSON report of all analyzed repos'
+  issue-url:
+    description: 'URL of created GitHub issue (if output-format is "issue")'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

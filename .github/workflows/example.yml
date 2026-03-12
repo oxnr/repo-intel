@@ -1,0 +1,20 @@
+# Example workflow — copy to your repo's .github/workflows/
+name: Competitive Intelligence
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Every Monday at 9am UTC
+  workflow_dispatch:       # Manual trigger
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - uses: oxnr/repo-intel@v1
+        with:
+          repos: 'facebook/react,vercel/next.js'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          output-format: issue
+          period-days: '7'
