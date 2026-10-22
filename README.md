@@ -13,6 +13,22 @@ AI-powered competitive intelligence from GitHub repos. Monitor competitor activi
 - **Strategic signals** — HIGH/MED/LOW prioritized intelligence
 - **Automated recommendations** — actionable insights per repo
 
+## Runtime and security release
+
+The action selects GitHub Actions' `node24` runtime. Self-hosted runners need
+[runner 2.327.1 or newer](https://github.com/actions/runner/releases/tag/v2.327.1)
+for Node 24 support. That compatibility minimum is not a security patch floor:
+verify the actual runner-bundled Node binary is **24.22.1 or newer** on the 24.x
+line before running it. `actions/setup-node` and this repository's `.node-version`
+set shell/tooling Node; they do not replace the runtime that executes an action.
+See the [October Node security release](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases).
+
+The repository's manual/demo workflows use the checked-out action so they test
+its current metadata. The disabled example schedule remains disabled. Existing
+external consumers of `oxnr/repo-intel@v1` keep using the previously published tag
+until an approved release advances it; merging the runtime change alone does
+not update that tag. Publish and select the reviewed release separately.
+
 ## Quick Start
 
 ```yaml
