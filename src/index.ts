@@ -3,10 +3,12 @@ import * as github from '@actions/github';
 import { fetchRepoData } from './github-client';
 import { analyzeRepo, RepoReport } from './analyzer';
 import { createIssue, createPRComment, outputJson } from './output';
+import { fetchDependencies, diffDependencies } from './dependency-tracker';
 
 async function run(): Promise<void> {
   try {
     const reposInput = core.getInput('repos', { required: true });
+    const trackDependencies = core.getInput('track-dependencies') === 'true';
     const token = core.getInput('github-token', { required: true });
     const outputFormat = core.getInput('output-format') || 'issue';
     const periodDays = parseInt(core.getInput('period-days') || '7', 10);
@@ -37,6 +39,13 @@ async function run(): Promise<void> {
       try {
         const data = await fetchRepoData(octokit, owner, repo, periodDays);
         const report = analyzeRepo(data, periodDays);
+        if (trackDependencies) {
+          const deps = await fetchDependencies(octokit, owner, repo);
+          if (deps.source) {
+            core.info(`Found ${deps.source} for ${owner}/${repo} with ${Object.keys(deps.dependencies).length} dependencies`);
+            (report as any).dependencies = deps;
+          }
+        }
         reports.push(report);
         core.info(`Analysis complete for ${owner}/${repo}`);
       } catch (err) {
