@@ -30,5 +30,5 @@ outputs:
     description: 'URL of created GitHub issue (if output-format is "issue")'
 
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'
